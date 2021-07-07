@@ -29,19 +29,24 @@ int main() {
 
   executable.elf_header.e_ehsize = sizeof(executable.elf_header);
 
+  executable.elf_header.e_shstrndx = SHN_UNDEF;
+
   // Set offsets to start the program
   executable.elf_header.e_entry = 0x400000 + (void *)&executable.code - (void *)&executable;
+
   executable.elf_header.e_phoff = (void *)&executable.prog_header - (void *)&executable;
   executable.elf_header.e_phentsize = sizeof(executable.prog_header);
   executable.elf_header.e_phnum = 1;
 
   executable.prog_header.p_type = PT_LOAD;
-  // executable.prog_header.p_offset = (void *)&executable.code - (void *)&executable;
+  executable.prog_header.p_offset = (void *)&executable.code - (void *)&executable;
   executable.prog_header.p_offset = 0;
-  executable.prog_header.p_vaddr = 0x400000;
+  executable.prog_header.p_vaddr = 0x400000 + (void *)&executable.prog_header - (void *)&executable;
+  executable.prog_header.p_paddr = 0x400000 + (void *)&executable.prog_header - (void *)&executable;
+  executable.prog_header.p_filesz = sizeof(executable);
+  executable.prog_header.p_memsz = sizeof(executable);
   executable.prog_header.p_flags = PF_X | PF_R;
-  executable.prog_header.p_filesz = sizeof(executable.code);
-  executable.prog_header.p_memsz = sizeof(executable.code);
+  executable.prog_header.p_align = 0x1000;
 
   // Include the code
   char code[] = "\x48\x83\xec\x08"                   // sub    $0x8,%rsp
