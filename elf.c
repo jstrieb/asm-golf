@@ -1,3 +1,11 @@
+/**
+ * Created by Jacob Strieb
+ * July 2021
+ *
+ * Based almost entirely on the documentation for elf(5) accessible via 
+ * "man elf"
+ */
+
 #include <elf.h>
 #include <stdio.h>
 #include <string.h>
@@ -70,7 +78,7 @@ int main() {
   printf("ELF header size: %lu\n", sizeof(executable.elf_header));
   printf("Program header size: %lu\n", sizeof(executable.prog_header)); 
   printf("Code size: %lu\n", sizeof(executable.code)); 
-  printf("Total size: %lu\n", sizeof(executable));
+  printf("Total size (with padding for alignment): %lu\n", sizeof(executable));
 
   return 0;
 }
