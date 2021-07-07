@@ -4,3 +4,6 @@
 CFLAGS = -s -static
 
 elf: elf.c
+
+print: print.s
+	$(CC) $(CFLAGS) -nostdlib "$<" -o "$@"
