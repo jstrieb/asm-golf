@@ -41,14 +41,13 @@ int main() {
   executable.prog_header.p_type = PT_LOAD;
   executable.prog_header.p_offset = (void *)&executable.code - (void *)&executable;
   executable.prog_header.p_offset = 0;
-  executable.prog_header.p_vaddr = 0x400000 + (void *)&executable.prog_header - (void *)&executable;
-  executable.prog_header.p_paddr = 0x400000 + (void *)&executable.prog_header - (void *)&executable;
+  executable.prog_header.p_vaddr = 0x400000;
   executable.prog_header.p_filesz = sizeof(executable);
   executable.prog_header.p_memsz = sizeof(executable);
   executable.prog_header.p_flags = PF_X | PF_R;
   executable.prog_header.p_align = 0x1000;
 
-  // Include the code
+  // Include the code itself
   char code[] = "\x48\x83\xec\x08"                   // sub    $0x8,%rsp
                 "\xc7\x44\x24\xf8\x34\x32\x0a\x00"   // movl   $0xa3234,-0x8(%rsp)
                 "\x48\xc7\xc7\x01\x00\x00\x00"       // mov    $0x1,%rdi
@@ -67,6 +66,11 @@ int main() {
   FILE *out = fopen("out", "w");
   (void)fwrite((void *)&executable, sizeof(char), sizeof(executable), out);
   (void)fclose(out);
+
+  printf("ELF header size: %lu\n", sizeof(executable.elf_header));
+  printf("Program header size: %lu\n", sizeof(executable.prog_header)); 
+  printf("Code size: %lu\n", sizeof(executable.code)); 
+  printf("Total size: %lu\n", sizeof(executable));
 
   return 0;
 }
