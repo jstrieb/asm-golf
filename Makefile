@@ -3,6 +3,9 @@
 
 CFLAGS = -s -static
 
+solution: elf
+	./elf
+
 elf: elf.c
 
 print: print.s

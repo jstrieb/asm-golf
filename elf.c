@@ -71,7 +71,7 @@ int main() {
 
 
   // Write the elf file out
-  FILE *out = fopen("out", "w");
+  FILE *out = fopen("solution", "w");
   (void)fwrite((void *)&exec, sizeof(char), sizeof(exec), out);
   (void)fclose(out);
 
